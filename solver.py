@@ -14,6 +14,13 @@ def get_random_page():
     return randomURL
 
 
+def get_only_page_from_query(page_data):
+    # Response is mapped by ids, sometimes we only look for one page so we return the first/only one with next, iter
+    pages = page_data['query']['pages']
+    only_page = pages[next(iter(pages))]
+    return only_page
+
+
 def id_to_url(id_):
     page_response = requests.get(baseURL, params = {
         "action": "query", 
@@ -23,11 +30,22 @@ def id_to_url(id_):
         "pageids": [id_]
     })
     page_data = page_response.json()
-    # The response.query.pages is mapped by ids, we get the first (or only) dict with next, iter
-    pages = page_data['query']['pages']
-    page = pages[next(iter(pages))]
+    page = get_only_page_from_query(page_data)
     url = page['fullurl']
     return url
+
+
+def get_links_from_page(id_):
+    response = requests.get(baseURL, params = {
+        "action": "query",
+        "format": "json",
+        "prop": "links",
+        "pageids": [id_]
+    })
+    data = response.json()
+    page = get_only_page_from_query(data)
+    links = page['links']
+    return links
 
 
 print(get_random_page())
