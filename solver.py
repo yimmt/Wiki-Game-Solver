@@ -6,7 +6,8 @@ def get_random_page():
     response = requests.get(baseURL, params = {
         "action": "query",
         "format": "json", 
-        "list": "random"
+        "list": "random",
+        "rnnamespace": 0
     })
     data = response.json()
     page_id = data['query']['random'][0]['id']
