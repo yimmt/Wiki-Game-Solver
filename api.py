@@ -11,8 +11,8 @@ def get_random_page():
     })
     data = response.json()
     page_id = data['query']['random'][0]['id']
-    randomURL = id_to_url(page_id)
-    return randomURL
+    # randomURL = id_to_url(page_id)
+    return page_id
 
 
 def get_only_page_from_query(page_data):
@@ -34,6 +34,18 @@ def id_to_url(id_):
     page = get_only_page_from_query(page_data)
     url = page['fullurl']
     return url
+
+
+def title_to_id(title):
+    page_response = requests.get(baseURL, params = {
+            "action": "query", 
+            "format": "json",
+            "titles": [title],
+    })
+    data = page_response.json()
+    page = get_only_page_from_query(data)
+    page_id = page['pageid']
+    return page_id
 
 
 def get_links_from_page(id_):
