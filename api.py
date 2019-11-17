@@ -54,8 +54,28 @@ def get_links_from_page(id_):
         "format": "json",
         "prop": "links",
         "pageids": [id_]
-    })
+        })
     data = response.json()
     page = get_only_page_from_query(data)
     links = page['links']
-    return links
+    ids_for_links = links_to_idlinks(links)
+    return ids_for_links
+
+
+def links_to_idlinks(links):
+    titles = []
+    for link in links:
+        title = link['title']
+        titles.append(title)
+    titles = '|'.join(titles)
+    response = requests.get(baseURL, params = {
+        "action": "query",
+        "format": "json",
+        "titles": titles, 
+        })
+    data = response.json()
+    pages = data['query']['pages']
+    ids = []
+    for key in pages:
+        ids.append(key)
+    return ids
