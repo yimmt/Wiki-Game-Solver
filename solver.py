@@ -17,7 +17,7 @@ def solve():
             print("YOU FOUND HITLER!")
             res = page_id
             while res:
-                print('p', page_id)
+                print(api.id_to_url(res))
                 res = parent[res]
             return
         try:
